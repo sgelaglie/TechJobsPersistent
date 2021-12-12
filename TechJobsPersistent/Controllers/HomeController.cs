@@ -32,12 +32,33 @@ namespace TechJobsPersistent.Controllers
         [HttpGet("/Add")]
         public IActionResult AddJob()
         {
-            return View();
+            List<Employer> employers = context.Employers.ToList();
+            List<Skill> skills = context.Skills.ToList();
+            AddJobViewModel ViewModel = new AddJobViewModel(employers,skills);
+
+            return View(ViewModel);
+            
         }
 
-        public IActionResult ProcessAddJobForm()
+        public IActionResult ProcessAddJobForm(AddJobViewModel addEmployerViewModel, string[] selectedSkills
+)
         {
-            return View();
+            Employer employer = context.Employers.Find(addEmployerViewModel.EmployerId);
+
+            if (ModelState.IsValid)
+            {
+                Job job = new Job(){Name = addEmployerViewModel.Name, Employer = employer};
+                foreach (string skill in selectedSkills)
+                {
+                    JobSkill jobSkill = new JobSkill() { Job = job, SkillId = Convert.ToInt32(skill) };
+                    
+                    context.JobSkills.Add(jobSkill);
+                }
+                context.Jobs.Add(job);
+                context.SaveChanges();
+                return Redirect("/Home/");
+            }
+                return View();
         }
 
         public IActionResult Detail(int id)
@@ -56,3 +77,6 @@ namespace TechJobsPersistent.Controllers
         }
     }
 }
+//Adding a Job
+//One important feature of your application is a form to add a new job.
+//Two action methods in HomeController, AddJob() and ProcessAddJobForm()*

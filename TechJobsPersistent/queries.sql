@@ -1,6 +1,12 @@
---Part 1
+--Part 1:
 
---Part 2
+Select COLUMN_NAME,* FROM INFORMATION_SCHEMA.COLUMNS  WHERE TABLE_NAME = "Job"
 
---Part 3
+
+--Part 2: 
+select * from employers Where (location = "st Louis city");
+
+
+--Part 3 
+select * from skills,jobskills WHERE  skills.Id = Jobskills.skillId and jobskill.skillId is not null order by skills.Name ASC
 
